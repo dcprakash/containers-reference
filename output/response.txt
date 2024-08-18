@@ -1,0 +1,6 @@
+User message: hi
+AI response: Hello! How can I assist you today?
+--------------------------------------------------
+User message: how many states in usa?
+AI response: The United States has 50 states.
+--------------------------------------------------

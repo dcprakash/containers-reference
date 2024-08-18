@@ -13,6 +13,10 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
 
+# Ensure the output directory exists
+output_dir = "/app/output"
+os.makedirs(output_dir, exist_ok=True)
+
 @app.route('/message', methods=['POST'])
 def message():
     data = request.json
@@ -33,6 +37,13 @@ def message():
         )
         response_message = completion.choices[0].message.content
         app.logger.info(f"OpenAI response: {response_message}")
+        
+        # Write the response to a file
+        with open(os.path.join(output_dir, "response.txt"), "a") as f:
+            f.write(f"User message: {received_message}\n")
+            f.write(f"AI response: {response_message}\n")
+            f.write("-" * 50 + "\n")
+            
         return {'response': response_message}, 200
     except Exception as e:
         app.logger.error(f"Error communicating with OpenAI: {e}")
